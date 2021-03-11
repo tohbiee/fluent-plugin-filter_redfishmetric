@@ -2,7 +2,7 @@ require 'fluent/plugin/filter'
 
 module Fluent::Plugin
   class RedfishMetricFilter < Filter
-    # Register this filter as "passthru"
+    # Register this filter as "redfishmetric"
     Fluent::Plugin.register_filter('redfishmetric', self)
 
     # config_param works like other plugins
