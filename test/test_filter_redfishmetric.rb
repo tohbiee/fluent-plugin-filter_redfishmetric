@@ -2,7 +2,7 @@ require_relative 'helper'
 require 'fluent/plugin/test/driver/filter'
 require 'fluent/plugin/redfishmetricfilter'
 
-class redfishmetricfilterTest < Test::Unit::TestCase
+class RedfishmetricfilterTest < Test::Unit::TestCase
     include Fluent
 
     def setup 
@@ -15,7 +15,7 @@ class redfishmetricfilterTest < Test::Unit::TestCase
         param2 value2
       ]
 
-    def create_driver(conf = '')
+    def create_driver(conf = CONFIG)
         Fluent::Test::Driver::Filter.new(Fluent::Plugin::RedfishMetricFilter).configure(conf)
     end
 
@@ -42,7 +42,7 @@ class redfishmetricfilterTest < Test::Unit::TestCase
                 param1 a
             ]
             assert_raise(Fluent::ConfigError) do
-               create_driver(conf)
+                create_driver(conf)
             end
         end
     end
@@ -82,11 +82,9 @@ class redfishmetricfilterTest < Test::Unit::TestCase
 
             expected = [{"Namespace"=>"ColomanagerFluentdRedfish", "Metric"=>"30", "Value"=>"DIMM Sock A1", "Report"=>"MemorySensor", "Dimension"=>{"Region"=>"Ce
                 ntralusEUAP", "IP"=>nil}},]
-            
+
             filtered_records = filter(conf, messages)
             assert_equal(expected, filtered_records)
-            end
         end
-        # ...
     end    
 end
