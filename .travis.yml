@@ -15,4 +15,3 @@ before_install:
 
 gemfile:
   - Gemfile
-  - Gemfile.v0.12
