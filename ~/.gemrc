@@ -1,0 +1,8 @@
+---
+:backtrace: false
+:bulk_threshold: 1000
+:sources:
+- https://rubygems.org/
+- https://tohbiee:de80619f0b3bbfe0260afdae6cdbe5c3cbae74c8@rubygems.pkg.github.com/tohbiee/
+:update_sources: true
+:verbose: true 
