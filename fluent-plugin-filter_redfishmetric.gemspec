@@ -5,13 +5,13 @@ require ('./lib/fluent/plugin/version.rb')
 
 Gem::Specification.new do |s|
   s.name        = "fluent-plugin-filter_redfishmetric"
-  s.version     = "0.0.3"
+  s.version     = "0.0.1"
   s.authors     = ["XX SXXX"]
   s.email       = ["XXXX"]
   s.homepage    = "https://github.com/tohbiee/redfish_fluentd_filter"
   s.summary     = "A Fluentd filter plugin to rettrieve selected redfish metric"
   s.description = s.summary
-  s.licenses    = ["XXX"]
+  s.licenses    = ["Apache-2.0"]
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
