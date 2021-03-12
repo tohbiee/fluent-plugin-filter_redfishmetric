@@ -51,34 +51,32 @@ class RedfishmetricfilterTest < Test::Unit::TestCase
         test 'filter metric and add dimension to record' do
             conf = CONFIG
 
-            messages = [
-                {
-                    "@odata.type" => "#MetricReport.v1_2_0.MetricReport",
-                    "@odata.context" => "/redfish/v1/$metadata#MetricReport.MetricReport",
-                    "@odata.id" => "/redfish/v1/TelemetryService/MetricReports/MemorySensor",
-                    "Id" => "MemorySensor",
-                    "Name" => "Memory Sensor Metric Report Definition",
-                    "ReportSequence" => "2",
-                    "MetricReportDefinition" => {
-                        "@odata.id" => "/redfish/v1/TelemetryService/MetricReportDefinitions/MemorySensor"
-                    },
-                    "Timestamp" => "2021-02-19T12:48:31-06:00",
-                    "MetricValues" => [
-                        {
-                            "MetricId" => "TemperatureReading",
-                            "Timestamp" => "2021-02-19T12:48:30-06:00",
-                            "MetricValue" => "31",
-                            "Oem" => {
-                                "Dell" => {
-                                    "ContextID" => "DIMM.Socket.A1",
-                                    "Label" => "DIMM Socket A1 TemperatureReading"
-                                }
+            messages =
+            {
+                "@odata.type" => "#MetricReport.v1_2_0.MetricReport",
+                "@odata.context" => "/redfish/v1/$metadata#MetricReport.MetricReport",
+                "@odata.id" => "/redfish/v1/TelemetryService/MetricReports/MemorySensor",
+                "Id" => "MemorySensor",
+                "Name" => "Memory Sensor Metric Report Definition",
+                "ReportSequence" => "2",
+                "MetricReportDefinition" => {
+                    "@odata.id" => "/redfish/v1/TelemetryService/MetricReportDefinitions/MemorySensor"
+                },
+                "Timestamp" => "2021-02-19T12:48:31-06:00",
+                "MetricValues" => [
+                    {
+                        "MetricId" => "TemperatureReading",
+                        "Timestamp" => "2021-02-19T12:48:30-06:00",
+                        "MetricValue" => "31",
+                        "Oem" => {
+                            "Dell" => {
+                                "ContextID" => "DIMM.Socket.A1",
+                                "Label" => "DIMM Socket A1 TemperatureReading"
                             }
-                        },
-                    ]
-                }
-
-            ]
+                        }
+                    },
+                ]
+            }
 
             expected = [{"Namespace"=>"ColomanagerFluentdRedfish", "Metric"=>"30", "Value"=>"DIMM Sock A1", "Report"=>"MemorySensor", "Dimension"=>{"Region"=>"Ce
                 ntralusEUAP", "IP"=>nil}},]

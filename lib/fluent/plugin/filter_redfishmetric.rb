@@ -9,28 +9,19 @@ module Fluent::Plugin
 
     def configure(conf)
       super
+      @metricValueList = []
       # Do the usual configuration here
     end
 
-    # def start
-    #   super
-    #   # Override this method if anything needed as startup.
-    # end
-
-    # def shutdown
-    #   # Override this method to use it to free up resources, etc.
-    #   super
-    # end
-
     def customredfishmetricfilter(record)
-      metricValueList = record["MetricValues"]
+      @metricValueList = record["MetricValues"]
       res = []
-      metricValueList.each do |val|
+      @metricValueList.each do |val|
           myRecord = {}
           myRecord["Namespace"] = "ColomanagerFluentdRedfish"
-          myRecord["Metric"] = val["MetricValue"]
           label = val["Oem"]["Dell"]["Label"]
-          myRecord["Value"] = label.delete(val["MetricId"]).strip()
+          myRecord["Metric"] = label.delete(val["MetricId"]).strip()
+          myRecord["Value"] = val["MetricValue"]
           myRecord["Report"] = record["Id"]
           myRecord["Dimension"] = {"Region" => "CentralusEUAP", "IP" => record["REMOTE_ADDR"]}
           res << myRecord

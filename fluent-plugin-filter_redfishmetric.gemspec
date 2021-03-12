@@ -1,8 +1,6 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
 
-require ('./lib/fluent/plugin/version.rb')
-
 Gem::Specification.new do |s|
   s.name        = "fluent-plugin-filter_redfishmetric"
   s.version     = "0.0.1"
