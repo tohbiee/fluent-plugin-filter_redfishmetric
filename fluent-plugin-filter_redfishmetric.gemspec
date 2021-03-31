@@ -4,8 +4,8 @@ $:.push File.expand_path("../lib", __FILE__)
 Gem::Specification.new do |s|
   s.name        = "fluent-plugin-filter_redfishmetric"
   s.version     = "0.0.1"
-  s.authors     = ["XX SXXX"]
-  s.email       = ["XXXX"]
+  s.authors     = ["Tobi Ajagbe"]
+  s.email       = ["tobiajagbe@microsoft.com"]
   s.homepage    = "https://github.com/tohbiee/redfish_fluentd_filter"
   s.summary     = "A Fluentd filter plugin to rettrieve selected redfish metric"
   s.description = s.summary
@@ -16,9 +16,10 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_runtime_dependency "fluentd", ">= 0.12"
-  s.add_development_dependency "rake"
-  s.add_development_dependency "test-unit"
+  s.add_development_dependency "bundler", "~> 1.14"
+  s.add_development_dependency "rake", "~> 12.0"
+  s.add_development_dependency "test-unit","~> 3.0"
   s.add_development_dependency "pry"
   s.add_development_dependency "pry-nav"
+  s.add_runtime_dependency "fluentd", [">= 0.14.10", "< 2"]
 end
