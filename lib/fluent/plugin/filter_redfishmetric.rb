@@ -8,39 +8,40 @@ module Fluent::Plugin
     # config_param works like other plugins
     config_param :Namespace, :string, :default => 'ColomanagerFluentdRedfish'
     config_param :Coloregion, :string, :default => 'CentralusEUAP'
-    config_param :Filter, :bool, :default => false
-    config_param :Metric, :Set, :default => {"TemperatureReading", "CompositeTemparature", "CriticalWarning", "Temperature", "DriveTemperature", "CRCErrorCount", "UncorrectableErrorCount", "PercentDriveLifeRemaining"}
-
+	  config_param :Filter, :bool, :default => false
+    config_param :Metric, :string, :default => "TemperatureReading"
+	
     def configure(conf)
       super
       @metricValueList = []
-      # Do the usual configuration here
-    end
+	  end
+	
+	  def filter_stream(tag, es)
+      new_es = Fluent::MultiEventStream.new
+      es.each { |time, record|
+		    @metricValueList = record["MetricValues"]
+		    @metricValueList&.each do |val|
+		      begin
+			      myRecord = {}
+			      myRecord["Namespace"] = @Namespace
+			      myRecord["Report"] = record["Id"]
+			      myRecord["Metric"] = val["MetricId"]
+			      myRecord["Value"] = val["MetricValue"]
+			      myRecord["Dimension"] = {"Region" => @Coloregion, "IP" => record["REMOTE_ADDR"]}
 
-    def customredfishmetricfilter(tag, time, record)
-      @metricValueList = record["MetricValues"]
-      res = []
-      @metricValueList.each do |val|
-          myRecord = {}
-          myRecord["Namespace"] = @Namespace
-		      myRecord["Report"] = record["Id"]
-          label = val["Oem"]["Dell"]["Label"]
-          myRecord["Metric"] = label.delete(val["MetricId"]).strip()
-          myRecord["Value"] = val["MetricValue"]
-          myRecord["Dimension"] = {"Region" => @Coloregion, "IP" => record["REMOTE_ADDR"]}
-		      if Filter
-	            if Metric.include?(myRecord["Metric"])
-			          res.add(tag, time, myRecord)
-		      else
-              res.add(tag, time, myRecord)
+			      if @Filter
+			        if @Metric == val["MetricId"]
+			          new_es.add(time, myRecord)
+			        end
+			      else
+              new_es.add(time, myRecord)
+			      end
+          rescue => e
+          router.emit_error_event(tag, time, record, e)
           end
-        
-      end
-      route.emit(res)
-    end
-
-    def filter(tag, time, record)
-        customredfishmetricfilter(tag, time, record)
+		    end
+      }
+      new_es
     end
   end
 end
