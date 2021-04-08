@@ -11,8 +11,7 @@ class RedfishmetricfilterTest < Test::Unit::TestCase
 
     # default configuration for tests
     CONFIG = %[
-        param1 value1
-        param2 value2
+        Metric false
       ]
 
     def create_driver(conf = CONFIG)
@@ -59,6 +58,7 @@ class RedfishmetricfilterTest < Test::Unit::TestCase
                 "Id" => "MemorySensor",
                 "Name" => "Memory Sensor Metric Report Definition",
                 "ReportSequence" => "2",
+                "REMOTE_ADDR" => "1.1.2.2"
                 "MetricReportDefinition" => {
                     "@odata.id" => "/redfish/v1/TelemetryService/MetricReportDefinitions/MemorySensor"
                 },
@@ -78,8 +78,8 @@ class RedfishmetricfilterTest < Test::Unit::TestCase
                 ]
             }
 
-            expected = [{"Namespace"=>"ColomanagerFluentdRedfish", "Metric"=>"30", "Value"=>"DIMM Sock A1", "Report"=>"MemorySensor", "Dimension"=>{"Region"=>"Ce
-                ntralusEUAP", "IP"=>nil}},]
+            expected = [{"Namespace"=>"ColomanagerFluentdRedfish", "Report"=>"MemorySensor", "Metric"=>"30", "Value"=>"31", "Dimension"=>{"Region"=>"Ce
+                ntralusEUAP", "IP"=>"1.1.2.2"}},]
 
             filtered_records = filter(conf, messages)
             assert_equal(expected, filtered_records)
