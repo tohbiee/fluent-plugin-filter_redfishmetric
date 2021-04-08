@@ -8,7 +8,7 @@ module Fluent::Plugin
     # config_param works like other plugins
     config_param :Namespace, :string, :default => 'ColomanagerFluentdRedfish'
     config_param :Coloregion, :string, :default => 'CentralusEUAP'
-	config_param :Filter, :bool, :default => false
+	  config_param :Filter, :bool, :default => false
     config_param :Metric, :array, :default => [], value_type: :string
 	
     def configure(conf)
