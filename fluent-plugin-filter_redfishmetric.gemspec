@@ -19,7 +19,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "bundler", "~> 1.14"
   s.add_development_dependency "rake", "~> 12.0"
   s.add_development_dependency "test-unit","~> 3.0"
-  s.add_development_dependency "pry"
-  s.add_development_dependency "pry-nav"
   s.add_runtime_dependency "fluentd", [">= 0.14.10", "< 2"]
 end
