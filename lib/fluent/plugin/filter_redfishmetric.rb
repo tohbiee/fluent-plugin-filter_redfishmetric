@@ -6,10 +6,10 @@ module Fluent::Plugin
     Fluent::Plugin.register_filter('redfishmetric', self)
 
     # config_param for the plugins
-    config_param :Namespace, :string, :default => 'ColomanagerFluentdRedfish'
-    config_param :Coloregion, :string, :default => 'CentralusEUAP'
-    config_param :Filter, :bool, :default => false
-    config_param :Metric, :array, :default => [], value_type: :string
+    config_param :namespace, :string, :default => 'ColomanagerFluentdRedfish'
+    config_param :coloregion, :string, :default => 'CentralusEUAP'
+    config_param :filter, :bool, :default => false
+    config_param :metric, :array, :default => [], value_type: :string
 	
     def configure(conf)
       super
@@ -23,12 +23,12 @@ module Fluent::Plugin
         @metricValueList&.each do |val|
           begin
             myRecord = {}
-            myRecord["Namespace"] = @Namespace
+            myRecord["Namespace"] = @namespace
             myRecord["Metric"] = val["MetricId"]
             myRecord["Dimensions"] = {"Region" => @Coloregion, "Report"=>record["Id"],"IP" => record["REMOTE_ADDR"]}
             myRecord["Value"] = val["MetricValue"]
-            if @Filter
-              if @Metric == val["MetricId"]
+            if @filter
+              if @metric&.include?(val["MetricId"])
                 new_es.add(time, myRecord)
               end
             else
