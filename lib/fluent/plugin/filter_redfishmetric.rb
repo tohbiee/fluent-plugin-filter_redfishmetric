@@ -15,7 +15,7 @@ module Fluent::Plugin
       @metricValueList = []
 	  end
 	
-	  def filter_stream(tag, es)
+    def filter_stream(tag, es)
       new_es = Fluent::MultiEventStream.new
       es.each { |time, record|
         @metricValueList = record["MetricValues"]
