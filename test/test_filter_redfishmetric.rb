@@ -11,7 +11,7 @@ class RedfishmetricfilterTest < Test::Unit::TestCase
 
     # default configuration for tests
     CONFIG = %[
-        Filter false
+        metric = ["TemperatureReading"]
       ]
 
     def create_driver(conf = CONFIG)
