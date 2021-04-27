@@ -23,8 +23,8 @@ module Fluent::Plugin
         key = val['Oem']['Dell']['Label']
         @counterMap[key] += 1 
         @valueMap[key] += (val['MetricValue']).to_i
-	    end
-	  end
+      end
+    end
 	
     def to_filter_report(reportid)
       if !@filtering&.empty?
