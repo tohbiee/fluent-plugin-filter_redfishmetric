@@ -7,24 +7,30 @@ module Fluent::Plugin
 
     # config_param for the plugins
     config_param :namespace, :string, :default => 'ColomanagerFluentdRedfish'
-    config_param :coloregion, :string, :default => 'CentralusEUAP'
     config_param :filtering, :array, :default => [], value_type: :string
 	
     def configure(conf)
       super
         @metrics = []
         @counterMap = Hash.new(0)
-        @valueMap = Hash.new(0)
+        @valueMap = Hash.new("0")
         @tofilter = []
-    end
+        @isTypeString = Hash.new(false)
+      end
 	  
     def map_by_label()
       @metrics&.each do |val|
         key = val['Oem']['Dell']['Label']
-        @counterMap[key] += 1 
-        @valueMap[key] += (val['MetricValue']).to_i
-	  end
-	end
+        tmp = Integer(val['MetricValue']) rescue nil
+        if tmp.nil?
+          @isTypeString[key] = true
+          @valueMap[key] = val['MetricValue']
+        else
+          @counterMap[key] += 1 
+          @valueMap[key] = (@valueMap[key]).to_i + tmp
+        end
+      end
+    end
 	
     def to_filter_report(reportid)
       if !@filtering&.empty?
@@ -58,8 +64,12 @@ module Fluent::Plugin
             myRecord = {}
             myRecord['Namespace'] = @namespace
             myRecord['Metric'] = key
-            myRecord['Dimensions'] = {'Region' => @coloregion, 'Report'=>record['Id'],'IP' => record['REMOTE_ADDR']}
-            myRecord['Value'] = (val/@counterMap[key]).to_s
+            myRecord['Dimensions'] = {'BaremetalMachineID' => record['machineID'], 'Report'=>record['Id']}
+            if @isTypeString[key] 
+              myRecord['Value'] = val
+            else 
+              myRecord['Value'] = ((val).to_i/@counterMap[key]).to_s
+            end
             if @tofilter&.include?(key.split[-1])
               new_es.add(time, myRecord)
             end
