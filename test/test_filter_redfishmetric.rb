@@ -10,9 +10,7 @@ class RedfishmetricfilterTest < Test::Unit::TestCase
     end
 
     # default configuration for tests
-    CONFIG = %[
-        metric = ["TemperatureReading"]
-      ]
+    CONFIG = %[]
 
     def create_driver(conf = CONFIG)
         Fluent::Test::Driver::Filter.new(Fluent::Plugin::RedfishMetricFilter).configure(conf)
@@ -71,15 +69,16 @@ class RedfishmetricfilterTest < Test::Unit::TestCase
                         "Oem" => {
                             "Dell" => {
                                 "ContextID" => "DIMM.Socket.A1",
-                                "Label" => "DIMM Socket A1 TemperatureReading"
+                                "Label" => "DIMM Socket A1 TemperatureReading",
+                                "FQDD" => "DIMM Socket A1"
                             }
                         }
                     },
-                ]
+                ],
+                "machineID": "testnode:test:testid"
             }
 
-            expected = [{"Namespace"=>"ColomanagerFluentdRedfish", "Report"=>"MemorySensor", "Metric"=>"30", "Value"=>"31", "Dimension"=>{"Region"=>"Ce
-                ntralusEUAP", "IP"=>"1.1.2.2"}},]
+            expected = [{"Namespace"=>"DellMetricReports", "Metric"=>"DIMM Socket A1 TemperatureReading", "Dimensions"=>{"BaremetalMachineID"=>"testnode:test:testid", "Report"=>"MemorySensor"}, "Value"=>"31"}]
 
             filtered_records = filter(conf, messages)
             assert_equal(expected, filtered_records)
