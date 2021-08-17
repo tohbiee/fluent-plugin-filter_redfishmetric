@@ -19,7 +19,7 @@ module Fluent::Plugin
       es.each { |time, record|
 
         @metrics = record['MetricValues']
-        @metrics&.each do |key, val|
+        @metrics&.each do |val|
           begin
             myRecord = {}
             myRecord['Namespace'] = @namespace
